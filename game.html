@@ -1073,6 +1073,9 @@ class KeyboardGame {
         const levelData = this.levels[this.level];
         let randomChar;
         
+        // Store current target as last before generating new one
+        this.lastTarget = this.currentTarget;
+        
         // If there's only one character in the level, we can't avoid repetition
         if (levelData.characters.length === 1) {
             randomChar = levelData.characters[0];
@@ -1083,7 +1086,6 @@ class KeyboardGame {
             } while (randomChar === this.lastTarget && levelData.characters.length > 1);
         }
         
-        this.lastTarget = this.currentTarget; // Store current as last
         this.currentTarget = randomChar;
         
         // Show game content and hide status
