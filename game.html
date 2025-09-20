@@ -1,0 +1,1583 @@
+<!-- 
+Programátorská Klávesnice - Standalone verze
+Generováno automaticky ze samostatných souborů
+Datum: Generated automatically
+-->
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programátorská Klávesnice - Standalone verze</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+<style>
+/* Game Styles for Programmer's Keyboard Learning Game */
+
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #f39c12;
+    --success-color: #27ae60;
+    --danger-color: #e74c3c;
+    --warning-color: #f1c40f;
+    --dark-color: #2c3e50;
+    --light-color: #ecf0f1;
+    --key-color: #34495e;
+    --key-hover: #3498db;
+    --key-active: #2ecc71;
+    --key-wrong: #e74c3c;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: var(--dark-color);
+}
+
+.game-title {
+    font-family: 'Fredoka One', cursive;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+/* Stats Cards */
+.stat-card {
+    background: white;
+    padding: 1rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.stat-card i {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-right: 0.5rem;
+}
+
+.stat-value {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+/* Challenge Area */
+.challenge-area {
+    text-align: center;
+}
+
+.challenge-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.challenge-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.challenge-card h3 {
+    color: var(--dark-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.target-character {
+    font-size: 4rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    background: var(--light-color);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem 0;
+    border: 4px solid var(--primary-color);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.challenge-text {
+    color: var(--dark-color);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.challenge-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-top: 1rem;
+}
+
+.challenge-number {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-weight: bold;
+    animation: numberChange 0.6s ease;
+}
+
+@keyframes numberChange {
+    0% { transform: scale(1); background: var(--primary-color); }
+    50% { transform: scale(1.2); background: var(--success-color); }
+    100% { transform: scale(1); background: var(--primary-color); }
+}
+
+.game-status {
+    text-align: center;
+    padding: 2rem;
+}
+
+.game-status h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+.game-status p {
+    color: var(--dark-color);
+    font-size: 1.1rem;
+}
+
+.challenge-content {
+    text-align: center;
+}
+
+/* Keyboard Styles */
+.keyboard-container {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.keyboard {
+    display: grid;
+    gap: 0.3rem;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.keyboard-row {
+    display: flex;
+    gap: 0.3rem;
+    justify-content: center;
+}
+
+.key {
+    background: var(--key-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    min-width: 45px;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.key:hover {
+    background: var(--key-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.key:active {
+    transform: translateY(0);
+}
+
+.key.correct {
+    background: var(--key-active);
+    animation: successBounce 0.6s ease;
+}
+
+.key.wrong {
+    background: var(--key-wrong);
+    animation: errorShake 0.6s ease;
+}
+
+.key.highlight {
+    background: var(--warning-color);
+    animation: highlightPulse 1s infinite;
+}
+
+@keyframes successBounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes errorShake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes highlightPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Special keys */
+.key.space {
+    min-width: 200px;
+}
+
+.key.shift,
+.key.ctrl,
+.key.alt {
+    min-width: 60px;
+    font-size: 0.7rem;
+}
+
+.key.enter {
+    min-width: 80px;
+}
+
+.key.backspace,
+.key.tab {
+    min-width: 70px;
+    font-size: 0.7rem;
+}
+
+/* Key labels */
+.key-main {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.key-shift {
+    font-size: 0.7rem;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    opacity: 0.7;
+}
+
+/* Side panel */
+.level-info,
+.achievements,
+.instructions {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.level-info h4,
+.achievements h5,
+.instructions h5 {
+    color: var(--dark-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.achievements h5 i,
+.instructions h5 i {
+    color: var(--secondary-color);
+    margin-right: 0.5rem;
+}
+
+.level-progress {
+    margin-top: 1rem;
+}
+
+.achievement-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    background: var(--light-color);
+}
+
+.achievement-item.unlocked {
+    background: linear-gradient(45deg, var(--success-color), var(--primary-color));
+    color: white;
+}
+
+.achievement-item i {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.instructions ul {
+    list-style: none;
+    padding: 0;
+}
+
+.instructions li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--light-color);
+}
+
+.instructions li:before {
+    content: '✓';
+    color: var(--success-color);
+    font-weight: bold;
+    margin-right: 0.5rem;
+}
+
+/* Modal improvements */
+.modal-content {
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-header {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 20px 20px 0 0;
+    border-bottom: none;
+}
+
+.modal-title {
+    font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 2rem;
+    }
+    
+    .target-character {
+        width: 80px;
+        height: 80px;
+        font-size: 3rem;
+    }
+    
+    .key {
+        min-width: 35px;
+        min-height: 35px;
+        padding: 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    .key.space {
+        min-width: 150px;
+    }
+    
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-fluid {
+        padding: 0.5rem;
+    }
+    
+    .target-character {
+        width: 70px;
+        height: 70px;
+        font-size: 2.5rem;
+    }
+    
+    .key {
+        min-width: 30px;
+        min-height: 30px;
+        padding: 0.4rem;
+        font-size: 0.7rem;
+    }
+    
+    .key.space {
+        min-width: 120px;
+    }
+    
+    .challenge-card {
+        padding: 1rem;
+    }
+}
+
+/* Fun animations */
+.coins-animation {
+    position: absolute;
+    color: var(--warning-color);
+    font-weight: bold;
+    pointer-events: none;
+    animation: floatUp 2s ease-out forwards;
+}
+
+/* Sound and visual feedback */
+.level-complete-animation {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    pointer-events: none;
+    animation: levelCompleteEffect 3s ease-out forwards;
+}
+
+@keyframes levelCompleteEffect {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+    80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+}
+
+/* Confetti animation */
+.confetti {
+    position: fixed;
+    top: -10px;
+    background: var(--warning-color);
+    width: 10px;
+    height: 10px;
+    animation: confettiFall 3s linear infinite;
+    z-index: 9998;
+}
+
+@keyframes confettiFall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Achievement notification */
+.achievement-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, var(--success-color), var(--primary-color));
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    z-index: 9999;
+    animation: slideInRight 0.5s ease, slideOutRight 0.5s ease 2.5s forwards;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+}
+
+.score-animation {
+    position: absolute;
+    color: var(--success-color);
+    font-weight: bold;
+    pointer-events: none;
+    animation: floatUp 2s ease-out forwards;
+}
+
+/* Loading and transitions */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.bounce-in {
+    animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+}
+</style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <header class="text-center py-3 mb-4">
+            <h1 class="game-title">
+                <i class="fas fa-keyboard"></i>
+                Programátorská Klávesnice
+            </h1>
+            <p class="subtitle">Nauč se, kde jsou všechny důležité znaky!</p>
+        </header>
+
+        <!-- Game Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <i class="fas fa-trophy"></i>
+                    <span class="stat-label">Level:</span>
+                    <span id="level" class="stat-value">1</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <i class="fas fa-star"></i>
+                    <span class="stat-label">Body:</span>
+                    <span id="score" class="stat-value">0</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <i class="fas fa-coins"></i>
+                    <span class="stat-label">Mince:</span>
+                    <span id="coins" class="stat-value">0</span>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <i class="fas fa-heart"></i>
+                    <span class="stat-label">Životy:</span>
+                    <span id="lives" class="stat-value">6</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Challenge Display -->
+                <div class="challenge-area mb-4">
+                    <div class="challenge-card">
+                        <div class="game-status" id="gameStatus">
+                            <h3>Připrav se na hru!</h3>
+                            <p>Za chvilku začneme...</p>
+                        </div>
+                        <div class="challenge-content" id="challengeContent" style="display: none;">
+                            <h3>Najdi znak:</h3>
+                            <div class="target-character" id="targetChar">$</div>
+                            <p class="challenge-text" id="challengeText">Najdi znak dolaru na klávesnici a zmáčkni ho!</p>
+                            <div class="challenge-counter">
+                                <span class="challenge-number" id="challengeNumber">1</span> / <span id="totalChallenges">10</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keyboard Layout -->
+                <div class="keyboard-container">
+                    <div class="keyboard" id="keyboard">
+                        <!-- Keyboard keys will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Level Info -->
+                <div class="level-info mb-3">
+                    <h4>Level <span id="currentLevel">1</span></h4>
+                    <p id="levelDescription">Základní znaky: $, @, #</p>
+                    <div class="level-progress">
+                        <div class="progress">
+                            <div class="progress-bar bg-success" id="levelProgress" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <small><span id="levelProgressText">0/10</span> správných odpovědí</small>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div class="achievements">
+                    <h5><i class="fas fa-medal"></i> Úspěchy</h5>
+                    <div id="achievementsList">
+                        <!-- Achievements will be added dynamically -->
+                    </div>
+                </div>
+
+                <!-- Instructions -->
+                <div class="instructions mt-4">
+                    <h5><i class="fas fa-info-circle"></i> Jak hrát</h5>
+                    <ul>
+                        <li>Najdi požadovaný znak na klávesnici</li>
+                        <li>Klikni na správnou klávesu</li>
+                        <li>Získej body a mince za správné odpovědi</li>
+                        <li>Postupuj do vyšších levelů</li>
+                        <li>Pozor na čas!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Modal -->
+        <div class="modal fade" id="gameOverModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Konec hry!</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-sad-tear fa-3x mb-3 text-warning"></i>
+                        <p>Tvoje skóre: <span id="finalScore">0</span> bodů</p>
+                        <p>Dosáhl jsi level: <span id="finalLevel">1</span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="restartGame()">Hrát znovu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Level Complete Modal -->
+        <div class="modal fade" id="levelCompleteModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Level dokončen!</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                        <i class="fas fa-trophy fa-3x mb-3 text-warning"></i>
+                        <p>Gratulujeme! Dokončil jsi level <span id="completedLevel">1</span>!</p>
+                        <p>Bonus: <span id="levelBonus">100</span> bodů</p>
+                        <p id="unlockMessage"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" onclick="nextLevel()">Další level</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Game Script -->
+    
+<script>
+// Programmer's Keyboard Learning Game - JavaScript
+
+class KeyboardGame {
+    constructor() {
+        this.level = 1;
+        this.score = 0;
+        this.coins = 0;
+        this.lives = 6;
+        this.currentTarget = '';
+        this.lastTarget = ''; // Track last character to avoid repetition
+        this.challengeNumber = 0;
+        this.levelProgress = 0;
+        this.levelTarget = 10;
+        this.correctAnswers = 0;
+        this.gameRunning = false;
+        
+        // US Keyboard Layout with special characters
+        this.keyboardLayout = [
+            // Row 1 - Numbers and symbols
+            [
+                {key: '`', shift: '~', code: 'Backquote'},
+                {key: '1', shift: '!', code: 'Digit1'},
+                {key: '2', shift: '@', code: 'Digit2'},
+                {key: '3', shift: '#', code: 'Digit3'},
+                {key: '4', shift: '$', code: 'Digit4'},
+                {key: '5', shift: '%', code: 'Digit5'},
+                {key: '6', shift: '^', code: 'Digit6'},
+                {key: '7', shift: '&', code: 'Digit7'},
+                {key: '8', shift: '*', code: 'Digit8'},
+                {key: '9', shift: '(', code: 'Digit9'},
+                {key: '0', shift: ')', code: 'Digit0'},
+                {key: '-', shift: '_', code: 'Minus'},
+                {key: '=', shift: '+', code: 'Equal'},
+                {key: 'Backspace', class: 'backspace', code: 'Backspace'}
+            ],
+            // Row 2 - QWERTY top row
+            [
+                {key: 'Tab', class: 'tab', code: 'Tab'},
+                {key: 'Q', code: 'KeyQ'},
+                {key: 'W', code: 'KeyW'},
+                {key: 'E', code: 'KeyE'},
+                {key: 'R', code: 'KeyR'},
+                {key: 'T', code: 'KeyT'},
+                {key: 'Y', code: 'KeyY'},
+                {key: 'U', code: 'KeyU'},
+                {key: 'I', code: 'KeyI'},
+                {key: 'O', code: 'KeyO'},
+                {key: 'P', code: 'KeyP'},
+                {key: '[', shift: '{', code: 'BracketLeft'},
+                {key: ']', shift: '}', code: 'BracketRight'},
+                {key: '\\', shift: '|', code: 'Backslash'}
+            ],
+            // Row 3 - QWERTY middle row
+            [
+                {key: 'Caps', class: 'caps', code: 'CapsLock'},
+                {key: 'A', code: 'KeyA'},
+                {key: 'S', code: 'KeyS'},
+                {key: 'D', code: 'KeyD'},
+                {key: 'F', code: 'KeyF'},
+                {key: 'G', code: 'KeyG'},
+                {key: 'H', code: 'KeyH'},
+                {key: 'J', code: 'KeyJ'},
+                {key: 'K', code: 'KeyK'},
+                {key: 'L', code: 'KeyL'},
+                {key: ';', shift: ':', code: 'Semicolon'},
+                {key: "'", shift: '"', code: 'Quote'},
+                {key: 'Enter', class: 'enter', code: 'Enter'}
+            ],
+            // Row 4 - QWERTY bottom row
+            [
+                {key: 'Shift', class: 'shift', code: 'ShiftLeft'},
+                {key: 'Z', code: 'KeyZ'},
+                {key: 'X', code: 'KeyX'},
+                {key: 'C', code: 'KeyC'},
+                {key: 'V', code: 'KeyV'},
+                {key: 'B', code: 'KeyB'},
+                {key: 'N', code: 'KeyN'},
+                {key: 'M', code: 'KeyM'},
+                {key: ',', shift: '<', code: 'Comma'},
+                {key: '.', shift: '>', code: 'Period'},
+                {key: '/', shift: '?', code: 'Slash'},
+                {key: 'Shift', class: 'shift', code: 'ShiftRight'}
+            ],
+            // Row 5 - Space bar row
+            [
+                {key: 'Ctrl', class: 'ctrl', code: 'ControlLeft'},
+                {key: 'Alt', class: 'alt', code: 'AltLeft'},
+                {key: 'Space', class: 'space', code: 'Space'},
+                {key: 'Alt', class: 'alt', code: 'AltRight'},
+                {key: 'Ctrl', class: 'ctrl', code: 'ControlRight'}
+            ]
+        ];
+
+        // Level definitions with target characters
+        this.levels = {
+            1: {
+                name: 'Číslice',
+                description: 'Základní číslice: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9',
+                characters: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+                target: 7
+            },
+            2: {
+                name: 'Základní symboly',
+                description: 'Základní znaky: $, @, #',
+                characters: ['$', '@', '#'],
+                target: 5
+            },
+            3: {
+                name: 'Závorky',
+                description: 'Všechny druhy závorek: (), [], {}',
+                characters: ['(', ')', '[', ']', '{', '}'],
+                target: 8
+            },
+            4: {
+                name: 'Písmena A-J',
+                description: 'První písmena abecedy: A, B, C, D, E, F, G, H, I, J',
+                characters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'],
+                target: 10
+            },
+            5: {
+                name: 'Písmena K-T',
+                description: 'Střední písmena abecedy: K, L, M, N, O, P, Q, R, S, T',
+                characters: ['K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T'],
+                target: 10
+            },
+            6: {
+                name: 'Písmena U-Z',
+                description: 'Poslední písmena abecedy: U, V, W, X, Y, Z',
+                characters: ['U', 'V', 'W', 'X', 'Y', 'Z'],
+                target: 10
+            },
+            7: {
+                name: 'Matematické operátory',
+                description: 'Operátory: +, -, *, /, =, %',
+                characters: ['+', '-', '*', '/', '=', '%'],
+                target: 10
+            },
+            8: {
+                name: 'Speciální znaky 1',
+                description: 'Znaky: &, |, \\, ^, ~',
+                characters: ['&', '|', '\\', '^', '~'],
+                target: 10
+            },
+            9: {
+                name: 'Interpunkce',
+                description: 'Znaky: :, ;, ", \', `, ?',
+                characters: [':', ';', '"', "'", '`', '?'],
+                target: 12
+            },
+            10: {
+                name: 'Pokročilé znaky',
+                description: 'Znaky: !, <, >, _, -',
+                characters: ['!', '<', '>', '_', '-'],
+                target: 12
+            },
+            11: {
+                name: 'Mix čísel a symbolů',
+                description: 'Kombinace čísel a základních symbolů',
+                characters: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '$', '@', '#', '+', '-', '*', '/', '='],
+                target: 20
+            },
+            12: {
+                name: 'Mix písmen',
+                description: 'Kombinace všech písmen',
+                characters: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
+                target: 20
+            },
+            13: {
+                name: 'Programátorský mix',
+                description: 'Kombinace všeho důležitého pro programování',
+                characters: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', '$', '@', '#', '(', ')', '[', ']', '{', '}', '+', '-', '*', '/', '=', '%', '&', '|', '\\', '^', '~', ':', ';', '"', "'", '`', '?', '!', '<', '>', '_'],
+                target: 30
+            }
+        };
+
+        // Achievements system
+        this.achievements = [
+            {id: 'first_correct', name: 'První úspěch!', description: 'První správná odpověď', unlocked: false, icon: 'fa-star'},
+            {id: 'level_5', name: 'Pokročilý', description: 'Dosáhni 5. levelu', unlocked: false, icon: 'fa-trophy'},
+            {id: 'level_10', name: 'Expert', description: 'Dosáhni 10. levelu', unlocked: false, icon: 'fa-crown'},
+            {id: 'hundred_points', name: 'Sběratel bodů', description: 'Získej 100 bodů', unlocked: false, icon: 'fa-gem'},
+            {id: 'perfect_level', name: 'Perfektní', description: 'Dokončí level bez chyby', unlocked: false, icon: 'fa-award'},
+            {id: 'numbers_master', name: 'Mistr čísel', description: 'Dokončí level s číslicemi', unlocked: false, icon: 'fa-calculator'},
+            {id: 'letters_master', name: 'Mistr písmen', description: 'Dokončí všechny levely s písmeny', unlocked: false, icon: 'fa-font'},
+            {id: 'symbol_master', name: 'Mistr symbolů', description: 'Dokončí všechny levely', unlocked: false, icon: 'fa-medal'}
+        ];
+
+        this.perfectLevel = true; // Track if current level is perfect
+        
+        this.init();
+    }
+
+    init() {
+        this.createKeyboard();
+        this.updateDisplay();
+        this.bindEvents();
+        this.startGame();
+        this.loadAchievements();
+    }
+
+    createKeyboard() {
+        const keyboardElement = document.getElementById('keyboard');
+        keyboardElement.innerHTML = '';
+
+        this.keyboardLayout.forEach((row, rowIndex) => {
+            const rowElement = document.createElement('div');
+            rowElement.className = 'keyboard-row';
+            
+            row.forEach(keyData => {
+                const keyElement = document.createElement('button');
+                keyElement.className = `key ${keyData.class || ''}`;
+                keyElement.setAttribute('data-code', keyData.code);
+                
+                if (keyData.shift) {
+                    keyElement.innerHTML = `
+                        <span class="key-shift">${keyData.shift}</span>
+                        <span class="key-main">${keyData.key}</span>
+                    `;
+                } else {
+                    keyElement.innerHTML = `<span class="key-main">${keyData.key}</span>`;
+                }
+                
+                keyElement.addEventListener('click', () => this.handleKeyClick(keyData));
+                rowElement.appendChild(keyElement);
+            });
+            
+            keyboardElement.appendChild(rowElement);
+        });
+    }
+
+    bindEvents() {
+        // Keyboard events
+        document.addEventListener('keydown', (e) => this.handleKeyPress(e));
+        
+        // Prevent context menu on right click
+        document.addEventListener('contextmenu', (e) => e.preventDefault());
+    }
+
+    handleKeyClick(keyData) {
+        if (!this.gameRunning) return;
+        
+        // Ignore clicks on modifier keys
+        const ignoredKeys = ['Shift', 'Ctrl', 'Alt', 'Caps', 'Tab', 'Enter', 'Backspace', 'Space'];
+        if (ignoredKeys.includes(keyData.key)) {
+            return; // Don't process these keys
+        }
+        
+        let targetChar = this.currentTarget;
+        let inputChar = keyData.key;
+        
+        // Handle shift characters
+        if (keyData.shift && targetChar === keyData.shift) {
+            inputChar = keyData.shift;
+        }
+        
+        this.checkAnswer(inputChar, keyData.code);
+    }
+
+    handleKeyPress(e) {
+        if (!this.gameRunning) return;
+        
+        // Ignore modifier keys and special keys that shouldn't count as wrong answers
+        const ignoredKeys = ['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12'];
+        const ignoredCodes = ['ShiftLeft', 'ShiftRight', 'ControlLeft', 'ControlRight', 'AltLeft', 'AltRight', 'MetaLeft', 'MetaRight', 'CapsLock', 'Tab', 'Escape'];
+        
+        if (ignoredKeys.includes(e.key) || ignoredCodes.includes(e.code)) {
+            return; // Don't process these keys
+        }
+        
+        e.preventDefault();
+        
+        // Find the key data for the pressed key
+        let keyData = null;
+        let inputChar = e.key;
+        
+        // Search through keyboard layout
+        for (let row of this.keyboardLayout) {
+            for (let key of row) {
+                if (key.code === e.code) {
+                    keyData = key;
+                    
+                    // Handle shift combinations
+                    if (e.shiftKey && key.shift) {
+                        inputChar = key.shift;
+                    } else if (!e.shiftKey) {
+                        inputChar = key.key;
+                    }
+                    break;
+                }
+            }
+            if (keyData) break;
+        }
+        
+        if (keyData) {
+            this.checkAnswer(inputChar, keyData.code);
+        }
+    }
+
+    checkAnswer(inputChar, keyCode) {
+        const keyElement = document.querySelector(`[data-code="${keyCode}"]`);
+        
+        if (inputChar === this.currentTarget) {
+            // Correct answer
+            this.handleCorrectAnswer(keyElement);
+        } else {
+            // Wrong answer
+            this.handleWrongAnswer(keyElement);
+        }
+    }
+
+    handleCorrectAnswer(keyElement) {
+        keyElement.classList.add('correct');
+        setTimeout(() => keyElement.classList.remove('correct'), 600);
+        
+        // Update score and progress
+        const scoreGain = 10;
+        this.score += scoreGain;
+        this.coins += 1;
+        this.correctAnswers++;
+        this.levelProgress++;
+        this.challengeNumber++;
+        
+        // Show score animation
+        this.showScoreAnimation(keyElement, `+${scoreGain}`);
+        
+        // Play success sound effect (simple beep)
+        this.playSuccessSound();
+        
+        // Check achievements
+        this.checkAchievements();
+        
+        // Check level completion
+        if (this.levelProgress >= this.levels[this.level].target) {
+            this.completeLevel();
+        } else {
+            // Wait a moment before next challenge for better UX
+            setTimeout(() => {
+                this.nextChallenge();
+            }, 800);
+        }
+        
+        this.updateDisplay();
+    }
+
+    handleWrongAnswer(keyElement) {
+        keyElement.classList.add('wrong');
+        setTimeout(() => keyElement.classList.remove('wrong'), 600);
+        
+        this.lives--;
+        this.perfectLevel = false;
+        
+        if (this.lives <= 0) {
+            this.gameOver();
+        }
+        // No need to reset timer - just continue with same challenge
+        
+        this.updateDisplay();
+    }
+
+    nextChallenge() {
+        // Get random character from current level, but avoid repetition
+        const levelData = this.levels[this.level];
+        let randomChar;
+        
+        // If there's only one character in the level, we can't avoid repetition
+        if (levelData.characters.length === 1) {
+            randomChar = levelData.characters[0];
+        } else {
+            // Keep trying until we get a different character
+            do {
+                randomChar = levelData.characters[Math.floor(Math.random() * levelData.characters.length)];
+            } while (randomChar === this.lastTarget && levelData.characters.length > 1);
+        }
+        
+        this.lastTarget = this.currentTarget; // Store current as last
+        this.currentTarget = randomChar;
+        
+        // Show game content and hide status
+        document.getElementById('gameStatus').style.display = 'none';
+        document.getElementById('challengeContent').style.display = 'block';
+        
+        // Update UI with animation
+        const targetCharElement = document.getElementById('targetChar');
+        const challengeTextElement = document.getElementById('challengeText');
+        const challengeNumberElement = document.getElementById('challengeNumber');
+        
+        // Add animation class to target character
+        targetCharElement.classList.add('bounce-in');
+        setTimeout(() => targetCharElement.classList.remove('bounce-in'), 600);
+        
+        targetCharElement.textContent = randomChar;
+        challengeTextElement.textContent = this.getCharacterDescription(randomChar);
+        challengeNumberElement.textContent = this.challengeNumber + 1;
+        
+        // Animate challenge number change
+        challengeNumberElement.style.animation = 'none';
+        setTimeout(() => {
+            challengeNumberElement.style.animation = 'numberChange 0.6s ease';
+        }, 10);
+        
+        // Highlight the correct key
+        this.highlightTargetKey(randomChar);
+        
+        this.updateDisplay();
+    }
+
+    highlightTargetKey(character) {
+        // Remove existing highlights
+        document.querySelectorAll('.key.highlight').forEach(key => {
+            key.classList.remove('highlight');
+        });
+        
+        // Find and highlight the correct key
+        for (let row of this.keyboardLayout) {
+            for (let keyData of row) {
+                if (keyData.key === character || keyData.shift === character) {
+                    const keyElement = document.querySelector(`[data-code="${keyData.code}"]`);
+                    if (keyElement) {
+                        keyElement.classList.add('highlight');
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+    getCharacterDescription(char) {
+        const descriptions = {
+            // Číslice
+            '0': 'Najdi číslo nula!',
+            '1': 'Najdi číslo jedna!',
+            '2': 'Najdi číslo dva!',
+            '3': 'Najdi číslo tři!',
+            '4': 'Najdi číslo čtyři!',
+            '5': 'Najdi číslo pět!',
+            '6': 'Najdi číslo šest!',
+            '7': 'Najdi číslo sedm!',
+            '8': 'Najdi číslo osm!',
+            '9': 'Najdi číslo devět!',
+            
+            // Písmena A-J
+            'A': 'Najdi písmeno A!',
+            'B': 'Najdi písmeno B!',
+            'C': 'Najdi písmeno C!',
+            'D': 'Najdi písmeno D!',
+            'E': 'Najdi písmeno E!',
+            'F': 'Najdi písmeno F!',
+            'G': 'Najdi písmeno G!',
+            'H': 'Najdi písmeno H!',
+            'I': 'Najdi písmeno I!',
+            'J': 'Najdi písmeno J!',
+            
+            // Písmena K-T
+            'K': 'Najdi písmeno K!',
+            'L': 'Najdi písmeno L!',
+            'M': 'Najdi písmeno M!',
+            'N': 'Najdi písmeno N!',
+            'O': 'Najdi písmeno O!',
+            'P': 'Najdi písmeno P!',
+            'Q': 'Najdi písmeno Q!',
+            'R': 'Najdi písmeno R!',
+            'S': 'Najdi písmeno S!',
+            'T': 'Najdi písmeno T!',
+            
+            // Písmena U-Z
+            'U': 'Najdi písmeno U!',
+            'V': 'Najdi písmeno V!',
+            'W': 'Najdi písmeno W!',
+            'X': 'Najdi písmeno X!',
+            'Y': 'Najdi písmeno Y!',
+            'Z': 'Najdi písmeno Z!',
+            
+            // Symboly
+            '$': 'Najdi znak dolaru na klávesnici!',
+            '@': 'Najdi zavináč - používá se v emailech!',
+            '#': 'Najdi mřížku - hashtag symbol!',
+            '(': 'Najdi levou kulatou závorku!',
+            ')': 'Najdi pravou kulatou závorku!',
+            '[': 'Najdi levou hranatou závorku!',
+            ']': 'Najdi pravou hranatou závorku!',
+            '{': 'Najdi levou složenou závorku!',
+            '}': 'Najdi pravou složenou závorku!',
+            '+': 'Najdi znak plus!',
+            '-': 'Najdi znak mínus/pomlčka!',
+            '*': 'Najdi znak krát/hvězdička!',
+            '/': 'Najdi lomítko - znak dělení!',
+            '=': 'Najdi znak rovná se!',
+            '%': 'Najdi znak procenta!',
+            '&': 'Najdi ampersand - znak "a"!',
+            '|': 'Najdi svislou čáru!',
+            '\\': 'Najdi zpětné lomítko!',
+            '^': 'Najdi stříšku!',
+            '~': 'Najdi vlnovku!',
+            ':': 'Najdi dvojtečku!',
+            ';': 'Najdi středník!',
+            '"': 'Najdi uvozovky!',
+            "'": 'Najdi apostrof!',
+            '`': 'Najdi zpětný apostrof!',
+            '?': 'Najdi otazník!',
+            '!': 'Najdi vykřičník!',
+            '<': 'Najdi "menší než"!',
+            '>': 'Najdi "větší než"!',
+            '_': 'Najdi podtržítko!'
+        };
+        
+        return descriptions[char] || `Najdi znak "${char}"!`;
+    }
+
+    completeLevel() {
+        this.gameRunning = false;
+        
+        // Show level complete animation
+        this.showLevelCompleteAnimation();
+        
+        // Calculate bonus
+        const bonus = this.level * 100;
+        if (this.perfectLevel) {
+            this.score += bonus * 2; // Double bonus for perfect level
+        } else {
+            this.score += bonus;
+        }
+        
+        // Play level complete sound
+        this.playLevelCompleteSound();
+        
+        // Show confetti for perfect levels
+        if (this.perfectLevel) {
+            this.showConfetti();
+        }
+        
+        // Check achievements
+        this.checkAchievements();
+        
+        // Show level complete modal with delay
+        setTimeout(() => {
+            document.getElementById('completedLevel').textContent = this.level;
+            document.getElementById('levelBonus').textContent = this.perfectLevel ? bonus * 2 : bonus;
+            
+            if (this.perfectLevel) {
+                document.getElementById('unlockMessage').textContent = 'Perfektní level! Dvojitý bonus!';
+            } else {
+                document.getElementById('unlockMessage').textContent = '';
+            }
+            
+            const modal = new bootstrap.Modal(document.getElementById('levelCompleteModal'));
+            modal.show();
+        }, 2000);
+        
+        this.updateDisplay();
+    }
+
+    nextLevel() {
+        this.level++;
+        this.levelProgress = 0;
+        this.correctAnswers = 0;
+        this.perfectLevel = true;
+        this.challengeNumber = 0;
+        this.lastTarget = ''; // Reset for new level
+        
+        // Close the level complete modal
+        const levelCompleteModal = bootstrap.Modal.getInstance(document.getElementById('levelCompleteModal'));
+        if (levelCompleteModal) {
+            levelCompleteModal.hide();
+        }
+        
+        if (this.level > Object.keys(this.levels).length) {
+            // Game completed
+            this.unlockAchievement('symbol_master');
+            alert('Gratulujeme! Dokončil jsi všechny levely!');
+            this.level = Object.keys(this.levels).length; // Stay at max level
+        }
+        
+        this.updateDisplay();
+        this.startGame();
+    }
+
+    startGame() {
+        this.gameRunning = true;
+        this.challengeNumber = 0;
+        this.lastTarget = ''; // Reset last target for new game/level
+        
+        // Show starting message
+        const gameStatus = document.getElementById('gameStatus');
+        const challengeContent = document.getElementById('challengeContent');
+        
+        gameStatus.style.display = 'block';
+        challengeContent.style.display = 'none';
+        
+        gameStatus.innerHTML = `
+            <h3>Level ${this.level} začíná!</h3>
+            <p>${this.levels[this.level].description}</p>
+            <div style="margin-top: 1rem;">
+                <button class="btn btn-primary btn-lg" onclick="game.startFirstChallenge()">
+                    <i class="fas fa-play"></i> Začít hrát
+                </button>
+            </div>
+        `;
+    }
+
+    startFirstChallenge() {
+        this.nextChallenge();
+    }
+
+    gameOver() {
+        this.gameRunning = false;
+        clearInterval(this.timerInterval);
+        
+        // Show game over modal
+        document.getElementById('finalScore').textContent = this.score;
+        document.getElementById('finalLevel').textContent = this.level;
+        
+        const modal = new bootstrap.Modal(document.getElementById('gameOverModal'));
+        modal.show();
+    }
+
+    restartGame() {
+        this.level = 1;
+        this.score = 0;
+        this.coins = 0;
+        this.lives = 6;
+        this.levelProgress = 0;
+        this.correctAnswers = 0;
+        this.perfectLevel = true;
+        this.challengeNumber = 0;
+        this.lastTarget = ''; // Reset for new game
+        
+        // Close the game over modal
+        const gameOverModal = bootstrap.Modal.getInstance(document.getElementById('gameOverModal'));
+        if (gameOverModal) {
+            gameOverModal.hide();
+        }
+        
+        this.updateDisplay();
+        this.startGame();
+    }
+
+    updateDisplay() {
+        document.getElementById('level').textContent = this.level;
+        document.getElementById('score').textContent = this.score;
+        document.getElementById('coins').textContent = this.coins;
+        document.getElementById('lives').textContent = this.lives;
+        document.getElementById('currentLevel').textContent = this.level;
+        
+        const levelData = this.levels[this.level];
+        document.getElementById('levelDescription').textContent = levelData.description;
+        document.getElementById('totalChallenges').textContent = levelData.target;
+        
+        const progressPercentage = (this.levelProgress / levelData.target) * 100;
+        document.getElementById('levelProgress').style.width = progressPercentage + '%';
+        document.getElementById('levelProgressText').textContent = `${this.levelProgress}/${levelData.target}`;
+    }
+
+    showScoreAnimation(element, text) {
+        const animation = document.createElement('div');
+        animation.className = 'score-animation';
+        animation.textContent = text;
+        animation.style.position = 'absolute';
+        animation.style.left = element.offsetLeft + 'px';
+        animation.style.top = element.offsetTop + 'px';
+        animation.style.zIndex = '1000';
+        
+        element.parentElement.appendChild(animation);
+        
+        setTimeout(() => {
+            animation.remove();
+        }, 2000);
+    }
+
+    checkAchievements() {
+        // First correct answer
+        if (this.correctAnswers === 1) {
+            this.unlockAchievement('first_correct');
+        }
+        
+        // Level 5
+        if (this.level >= 5) {
+            this.unlockAchievement('level_5');
+        }
+        
+        // Level 10
+        if (this.level >= 10) {
+            this.unlockAchievement('level_10');
+        }
+        
+        // 100 points
+        if (this.score >= 100) {
+            this.unlockAchievement('hundred_points');
+        }
+        
+        // Perfect level
+        if (this.perfectLevel && this.levelProgress >= this.levels[this.level].target) {
+            this.unlockAchievement('perfect_level');
+        }
+        
+        // Numbers master (completed level 1 - číslice)
+        if (this.level === 1 && this.levelProgress >= this.levels[this.level].target) {
+            this.unlockAchievement('numbers_master');
+        }
+        
+        // Letters master (completed all letter levels - 4, 5, 6)
+        if (this.level >= 6 && this.levelProgress >= this.levels[this.level].target) {
+            this.unlockAchievement('letters_master');
+        }
+    }
+
+    unlockAchievement(achievementId) {
+        const achievement = this.achievements.find(a => a.id === achievementId);
+        if (achievement && !achievement.unlocked) {
+            achievement.unlocked = true;
+            this.showAchievementNotification(achievement);
+            this.updateAchievementsDisplay();
+            this.saveAchievements();
+        }
+    }
+
+    showAchievementNotification(achievement) {
+        // Create achievement notification
+        const notification = document.createElement('div');
+        notification.className = 'achievement-notification';
+        notification.innerHTML = `
+            <i class="fas ${achievement.icon}"></i> Úspěch odemčen: ${achievement.name}
+        `;
+        
+        document.body.appendChild(notification);
+        
+        // Play achievement sound
+        this.playAchievementSound();
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    showLevelCompleteAnimation() {
+        const animation = document.createElement('div');
+        animation.className = 'level-complete-animation';
+        animation.innerHTML = `
+            <div style="text-align: center; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                <i class="fas fa-trophy" style="font-size: 4rem; color: #f1c40f;"></i>
+                <h2 style="margin: 20px 0; font-family: 'Fredoka One', cursive;">Level dokončen!</h2>
+            </div>
+        `;
+        
+        document.body.appendChild(animation);
+        
+        setTimeout(() => {
+            animation.remove();
+        }, 3000);
+    }
+
+    showConfetti() {
+        const colors = ['#f1c40f', '#e74c3c', '#3498db', '#2ecc71', '#9b59b6', '#f39c12'];
+        
+        for (let i = 0; i < 50; i++) {
+            setTimeout(() => {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    if (confetti.parentNode) {
+                        confetti.remove();
+                    }
+                }, 4000);
+            }, i * 50);
+        }
+    }
+
+    // Simple sound effects using Web Audio API
+    playSuccessSound() {
+        this.playTone(523.25, 0.1); // C5 note
+    }
+
+    playLevelCompleteSound() {
+        // Play a simple melody for level complete
+        setTimeout(() => this.playTone(523.25, 0.15), 0);    // C5
+        setTimeout(() => this.playTone(659.25, 0.15), 150);  // E5
+        setTimeout(() => this.playTone(783.99, 0.3), 300);   // G5
+    }
+
+    playAchievementSound() {
+        // Play achievement sound
+        setTimeout(() => this.playTone(783.99, 0.1), 0);     // G5
+        setTimeout(() => this.playTone(1046.50, 0.2), 100);  // C6
+    }
+
+    playTone(frequency, duration) {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        } catch (e) {
+            // Fallback if Web Audio API is not supported
+            console.log('Sound effect would play here');
+        }
+    }
+
+    updateAchievementsDisplay() {
+        const achievementsList = document.getElementById('achievementsList');
+        achievementsList.innerHTML = '';
+        
+        this.achievements.forEach(achievement => {
+            const achievementElement = document.createElement('div');
+            achievementElement.className = `achievement-item ${achievement.unlocked ? 'unlocked' : ''}`;
+            achievementElement.innerHTML = `
+                <i class="fas ${achievement.icon}"></i>
+                <div>
+                    <strong>${achievement.name}</strong>
+                    <br>
+                    <small>${achievement.description}</small>
+                </div>
+            `;
+            achievementsList.appendChild(achievementElement);
+        });
+    }
+
+    loadAchievements() {
+        const saved = localStorage.getItem('keyboardGameAchievements');
+        if (saved) {
+            const savedAchievements = JSON.parse(saved);
+            savedAchievements.forEach(saved => {
+                const achievement = this.achievements.find(a => a.id === saved.id);
+                if (achievement) {
+                    achievement.unlocked = saved.unlocked;
+                }
+            });
+        }
+        this.updateAchievementsDisplay();
+    }
+
+    saveAchievements() {
+        localStorage.setItem('keyboardGameAchievements', JSON.stringify(this.achievements));
+    }
+}
+
+// Global functions for modal buttons
+function restartGame() {
+    if (window.game) {
+        window.game.restartGame();
+    }
+}
+
+function nextLevel() {
+    if (window.game) {
+        window.game.nextLevel();
+    }
+}
+
+// Initialize game when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    window.game = new KeyboardGame();
+});
+</script>
+</body>
+</html>
